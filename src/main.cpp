@@ -2,32 +2,35 @@
 #include "utf8-character.h"
 #include "gbk-character.h"
 #include "buffer-pool.h"
+#include "token-buffer.h"
+#include "token.h"
 using namespace std;
 
 int main() {
 	const string words = "c中国人民";
+	//const string words = "hello22";
 	BufferPool buffer_pool;
 	UTF8Character charater;
+	TokenBuffer token_buffer;
 	charater.SetCharacterText(words);
 	int position,length;
 	cout << "word size is " << words.size() << endl;
 	while(charater.UTF8CharacterLexer(position, length)) {
-		cout << position << " " << length << endl;
 	    string word = words.substr(position, length);
-		cout << word << endl;
 		buffer_pool.WriteString(word);
 	}
-	//buffer_pool.WriteString("c");
-	char* byte;
-	int l = 0;
-	//buffer_pool.GetPool(byte);
-	while(buffer_pool.ReadString(byte, l)) {
-		cout << byte << " " << l << endl;
-	}
+	string t;
+	
+	TokenBuffer::Iterator iterator;
+	
+	//iterator.next(t);
+//	cout << t.t_text << endl;
+	
 	//char* word_t = new char[1024];
-	//buffer_pool.ReadString(word_t, l);
-	//cout << word_t << endl;
-	cout << byte << endl;
-	cout << words << endl;
+	while(buffer_pool.ReadString(t)) {
+		cout << t << endl;
+	}
+	//cout << byte << endl;
+	//cout << words << endl;
 	return 1;
 }

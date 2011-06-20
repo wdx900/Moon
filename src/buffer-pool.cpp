@@ -62,7 +62,6 @@ bool BufferPool::WriteInt(const int value) {
 }
 
 bool BufferPool::WriteString(const char *text, int length) {
-	WriteInt(length);
 	WriteBytes(text, length);	
 	return true;
 }
@@ -100,13 +99,15 @@ bool BufferPool::ReadInt(int &value) {
 	return ReadBytes(v , sizeof(int));
 }
 
-bool BufferPool::ReadString(char *text, int &length) {
-	if(!ReadInt(length) || length < 0) {
+bool BufferPool::ReadString(string &text) {
+	int length;
+	if(!ReadInt(length) || length <= 0) {
 		return false;
 	}
-	text = new char[length + 1];
-	ReadBytes(text, length);
+	char* text_tmp = new char[length + 1];
+	ReadBytes(text_tmp, length);
 	text[length] = '\0';
+	text = text_tmp;
 	return true;
 }
 

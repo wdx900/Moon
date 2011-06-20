@@ -22,13 +22,14 @@ public:
 
 public:
 	bool ReadString(string &text);
-	bool ReadString(char* text, int &length);
 	bool ReadInt(int &value);
 	bool ReadByte(char &b);	
 	bool ReadBytes(void* bytes, int length);
 
 public:
 	bool GetPool(char* byte);
+	bool GetWriteSize(int size);
+	bool GetReadCursor(int cursor);
 
 private:
 	void resize();
@@ -45,5 +46,16 @@ private:
 	int read_cursor;
 
 };
+
+inline bool BufferPool::GetWriteSize(int size) {
+	size = write_cursor;
+	return true;
+}
+
+inline bool BufferPool::GetReadCursor(int cursor) {
+	cursor = read_cursor;
+	return true;
+}
+
 
 #endif

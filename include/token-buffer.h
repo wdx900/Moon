@@ -3,7 +3,7 @@
 
 #include "token.h"
 
-class TokenBuffer {
+class TokenBuffer : public BufferPool {
 
 public:
 	class Iterator {
@@ -11,9 +11,9 @@ public:
 			friend class TokenBuffer;
 
 		public:
-			Iterator();
+			Iterator() {};
 		public:
-			~Iterator();
+			~Iterator() {};
 		
 		public:
 			bool next(Token &token);
@@ -24,10 +24,11 @@ public:
 	};
 
 public:	
-	TokenBuffer();
-	virtual ~TokenBuffer();
+	TokenBuffer() {};
+	virtual ~TokenBuffer() {};
 	
-	bool WriteToken(const Token &token);		
+	bool WriteToken(const Token &token);
+	bool WriteToken(string text);
 	bool ReadToken(Token &token);
 };
 
@@ -41,6 +42,20 @@ inline bool TokenBuffer::Iterator::next(Token &token) {
 	return false;
 }
 
+inline bool TokenBuffer::ReadToken(Token &token) {
+	//if(GetReadCursor(token.t_start_offset) &&
+	ReadString(token.t_text);
+	return true;
+	
+	
+//	return false;	
+} 
 
+inline bool TokenBuffer::WriteToken(string text) {
+	if(WriteString(text)) {
+		return true;
+	}
+	return false;
+}
 
 #endif
