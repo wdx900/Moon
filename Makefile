@@ -1,10 +1,10 @@
 objects = main.o utf8-character.o base-character.o gbk-character.o buffer-pool.o
 #objects = %.o:%.cpp
 
-test:$(objects)
-	g++ -o test $(objects) -I./include/
+moon:$(objects)
+	g++ -o moon $(objects) -I./include/
 
-main.o:./src/main.cpp ./include/utf8-character.h
+main.o:./src/main.cpp ./include/utf8-character.h ./include/trie-node.h
 	g++ -c ./src/main.cpp -I./include/ 
 
 utf8-character.o:./src/utf8-character.cpp ./include/utf8-character.h 
