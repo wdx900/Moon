@@ -2,8 +2,11 @@
 #define BUFFER_POOL_H
 
 #include <iostream>
+#include <string.h>
+
 using namespace std;
 
+#define INIT_POOL_SIZE 102400
 
 class BufferPool {
 public:
@@ -11,35 +14,36 @@ public:
 	virtual ~BufferPool();
 
 public:
-	bool WriteString(string &text);
-	bool WriteString(const char *text, int length);
+	bool WriteString(const string &text);
+	bool WriteString(const char* text, int length);
 	bool WriteInt(const int value);
 	bool WriteByte(const char b);
-	bool WriteBytes(const void *bytes, int length);
+	bool WriteBytes(const void* bytes, int length);
 
 public:
 	bool ReadString(string &text);
-	bool ReadString(const char *&text, int &length);
-	bool ReadInt(const int &value);
-	bool ReadByte(const char &b);
+	bool ReadString(char* text, int &length);
+	bool ReadInt(int &value);
+	bool ReadByte(char &b);	
+	bool ReadBytes(void* bytes, int length);
 
 public:
+	bool GetPool(char* byte);
+
+private:
 	void resize();
 
 private:
-	char* b_text;
-	char* b_write;
+	char* b_pool;
 	char* b_read;
+	char* b_write;
 	int b_length;
+	
 
 private:
 	int write_cursor;
 	int read_cursor;
 
 };
-
-inline void BufferPool::resize() {
-	b_length *= 2;
-}
 
 #endif

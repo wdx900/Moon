@@ -1,4 +1,4 @@
-objects = main.o utf8-character.o base-character.o gbk-character.o
+objects = main.o utf8-character.o base-character.o gbk-character.o buffer-pool.o
 #objects = %.o:%.cpp
 
 test:$(objects)
@@ -15,6 +15,10 @@ gbk-character.o:./src/gbk-character.cpp ./include/gbk-character.h
 
 base-character.o:./src/base-character.cpp ./include/base-character.h
 	g++ -c ./src/base-character.cpp -I./include/
+
+buffer-pool.o:./src/buffer-pool.cpp ./include/buffer-pool.h
+	g++ -c ./src/buffer-pool.cpp -I./include/
+
 
 clean:
 	rm -rf test $(objects) 
