@@ -106,7 +106,7 @@ bool BufferPool::ReadString(string &text) {
 	}
 	char* text_tmp = new char[length + 1];
 	ReadBytes(text_tmp, length);
-	text[length] = '\0';
+	text_tmp[length] = '\0';
 	text = text_tmp;
 	return true;
 }

@@ -2,6 +2,7 @@
 #define TOKEN_BUFFER_H
 
 #include "token.h"
+#include "buffer-pool.h"
 #include <memory>
 
 

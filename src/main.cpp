@@ -5,47 +5,56 @@
 #include "token-buffer.h"
 #include "token.h"
 #include "trie-node.h"
+#include "file-reader.h"
+#include "ngram-tokenizer.h"
+
 using namespace std;
 
 int main() {
-	const string words = "c中国人民";
-	//const string words = "hello22";
-	BufferPool buffer_pool;
-	UTF8Character charater, test_charater;
-	TokenBuffer token_buffer,test_buffer;
-	charater.SetCharacterText(words);
-	test_charater.SetCharacterText(words);
-	int position,length;
-	cout << "word size is " << words.size() << endl;
-	while(charater.UTF8CharacterLexer(position, length)) {
-	    string word = words.substr(position, length);
-		token_buffer.WriteString(word);
+	Trie *trie = new Trie;
+	FileReader file_reader;
+	if(file_reader.open("dict")) {
+		cout << "open file is OK" << endl;
 	}
-	string t;
-	//Token token;
-	Trie trie;
-	trie.insert(token_buffer);
+	char* str = new char[100];
+	while(file_reader.readline(str)) {
+		int position, length;
+	    UTF8Character character;
+		TokenBuffer *token_buffer = new TokenBuffer;
+		string words(str);
+		character.SetCharacterText(words);	
+		if(words.size() == 0) continue;
+		while(character.UTF8CharacterLexer(position, length)) {
+			string word = words.substr(position, length);
+			if(word.size() == 1) break;
+			token_buffer->WriteString(word);	
+		}
+		trie->insert(token_buffer);
+	}
+	file_reader.close();
+	cout << "read file is fininshed" << endl;	
 
-	while(test_charater.UTF8CharacterLexer(position, length)) {
-        string word = words.substr(position, length);
-        test_buffer.WriteString(word);
+	/*string test_word = "你好";
+	cout << test_word << endl;
+	UTF8Character test_character;
+	TokenBuffer *test_buffer = new TokenBuffer;
+	test_character.SetCharacterText(test_word);
+	int position, length;
+	while(test_character.UTF8CharacterLexer(position, length)) {
+        string word = test_word.substr(position, length);
+        test_buffer->WriteString(word);
     }
-	if(trie.find(test_buffer)) {
+	if(trie->find(test_buffer)) {
 		cout << "find word !" << endl;
-	}
-	//TokenBuffer::Iterator *token_iterator = token_buffer.iterator();
-	
-	
-	
-	//while(token_iterator->next(token)) {
-	//	cout << token.t_text << endl;
-	//}
-	
-	//char* word_t = new char[1024];
-//	while(buffer_pool.ReadString(t)) {
-//		cout << t << endl;
-//	}
-	//cout << byte << endl;
-	//cout << words << endl;
+	} else {
+		cout << "not find!!" << endl;
+	}*/
+	string test_str = "北京欢迎你";
+	NGramTokenizer ngram_tokenizer;
+	ngram_tokenizer.SetNGram(3);
+	TokenBuffer out_tokens;
+	ngram_tokenizer.DoTokenizerInteral(test_str, out_tokens);
+		
+
 	return 1;
 }

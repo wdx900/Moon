@@ -1,4 +1,4 @@
-objects = main.o utf8-character.o base-character.o gbk-character.o buffer-pool.o
+objects = main.o utf8-character.o base-character.o gbk-character.o buffer-pool.o file-reader.o base-tokenizer.o ngram-tokenizer.o
 #objects = %.o:%.cpp
 
 moon:$(objects)
@@ -18,6 +18,15 @@ base-character.o:./src/base-character.cpp ./include/base-character.h
 
 buffer-pool.o:./src/buffer-pool.cpp ./include/buffer-pool.h
 	g++ -c ./src/buffer-pool.cpp -I./include/
+
+file-reader.o:./src/file-reader.cpp ./include/file-reader.h
+	g++ -c ./src/file-reader.cpp -I./include/
+
+base-tokenizer.o:./src/base-tokenizer.cpp ./include/base-tokenizer.h
+	g++ -c ./src/base-tokenizer.cpp -I./include/
+
+ngram-tokenizer.o:./src/ngram-tokenizer.cpp ./include/ngram-tokenizer.h
+	g++ -c ./src/ngram-tokenizer.cpp -I./include/
 
 
 clean:

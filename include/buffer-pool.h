@@ -6,7 +6,7 @@
 
 using namespace std;
 
-#define INIT_POOL_SIZE 102400
+#define INIT_POOL_SIZE 1024
 
 class BufferPool {
 public:

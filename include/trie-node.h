@@ -25,10 +25,10 @@ public:
 	Trie();
 	
 public:
-	bool insert(TokenBuffer &token_buffer);
+	bool insert(TokenBuffer *token_buffer);
 	//bool insert(const char *str);
 
-	bool find(TokenBuffer &token_buffer);
+	bool find(TokenBuffer *token_buffer);
 	//bool find(const char *str);
 
 	//bool erase(Iterator begin, Iterator end);
@@ -50,11 +50,11 @@ TrieNode::~TrieNode(){
 
 Trie::Trie():root(new Node("")) {}
 
-bool Trie::insert(TokenBuffer &token_buffer) {
+bool Trie::insert(TokenBuffer *token_buffer) {
 	PNode cur = root;
 	PNode pre;
 	Token token;
-	TokenBuffer::Iterator *token_iterator = token_buffer.iterator();
+	TokenBuffer::Iterator *token_iterator = token_buffer->iterator();
 	while(token_iterator->next(token)) {
 		if(cur->children.find(token.t_text) == cur->children.end()) {
 			cur->children.insert(pair<string, TrieNode*>(token.t_text, new Node(token.t_text)));
@@ -68,13 +68,13 @@ bool Trie::insert(TokenBuffer &token_buffer) {
 
 
 
-bool Trie::find(TokenBuffer &token_buffer) {
+bool Trie::find(TokenBuffer *token_buffer) {
 	PNode cur = root;
 	Token token;
-	TokenBuffer::Iterator *token_iterator = token_buffer.iterator();
+	TokenBuffer::Iterator *token_iterator = token_buffer->iterator();
 	cout << "begin to find" << endl;
 	while(token_iterator->next(token)) {
-		cout << token.t_text;
+		cout << token.t_text << endl;
 		if(cur->children.find(token.t_text) == cur->children.end()) {
 			return false;
 		}
