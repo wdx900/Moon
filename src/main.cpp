@@ -16,20 +16,25 @@ int main() {
 	if(file_reader.open("dict")) {
 		cout << "open file is OK" << endl;
 	}
+	
 	char* str = new char[100];
 	while(file_reader.readline(str)) {
 		int position, length;
+		vector<int> words_list;
 	    UTF8Character character;
 		TokenBuffer *token_buffer = new TokenBuffer;
 		string words(str);
 		character.SetCharacterText(words);	
 		if(words.size() == 0) continue;
 		while(character.UTF8CharacterLexer(position, length)) {
-			string word = words.substr(position, length);
-			if(word.size() == 1) break;
-			token_buffer->WriteString(word);	
+			//string word = words.substr(position, length);
+			//if(word.size() == 1) break;
+			//token_buffer->WriteString(word);	
+			if(length == 1)break;
+			words_list.push_back(length);
 		}
-		trie->insert(token_buffer);
+		trie->insert(words, words_list);
+			
 	}
 	file_reader.close();
 	cout << "read file is fininshed" << endl;	
@@ -49,12 +54,23 @@ int main() {
 	} else {
 		cout << "not find!!" << endl;
 	}*/
-	string test_str = "北京欢迎你";
+	string test_str = "今天天气真好";
+	string word_test = "";
 	NGramTokenizer ngram_tokenizer;
 	ngram_tokenizer.SetNGram(3);
-	TokenBuffer out_tokens;
-	ngram_tokenizer.DoTokenizerInteral(test_str, out_tokens);
-		
-
+	vector<string> words_str;
+	ngram_tokenizer.DoTokenizerInteral(test_str, words_str);
+	for(int i = 0; i < words_str.size(); ++i) {
+		vector<int> length_list;
+		UTF8Character character;
+		character.SetCharacterText(words_str[i]);
+		int position, length;
+		while(character.UTF8CharacterLexer(position, length)) {
+			length_list.push_back(length);
+		}
+		if(trie->find(words_str[i], length_list)) {
+			cout << words_str[i] << endl;
+		} 	
+	}
 	return 1;
 }

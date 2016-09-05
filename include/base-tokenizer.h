@@ -2,6 +2,7 @@
 #define BASE_TOKENIZER_H
 
 #include <iostream>
+#include <vector>
 #include "token-buffer.h"
 
 using namespace std;
@@ -9,14 +10,13 @@ using namespace std;
 class BaseTokenizer {
 
 public:
-	//BaseTokenizer() {};
-	//virtual ~BaseTokenizer() {};
+	BaseTokenizer() {};
+	virtual ~BaseTokenizer() {};
 	
 public:
-	bool DoTokenizer();
-
+	bool DoTokenizer(); 
 protected:
-	//virtual bool DoTokenizerInteral(string &text, TokenBuffer &out_token);	
+	virtual bool DoTokenizerInteral(string &text, vector<string> &words_str) = 0;	
 
 };
 

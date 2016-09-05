@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <map>
+#include <vector>
 #include "token-buffer.h"
 
 using namespace std;
@@ -25,10 +26,10 @@ public:
 	Trie();
 	
 public:
-	bool insert(TokenBuffer *token_buffer);
+	bool insert(string words, vector<int> words_list);
 	//bool insert(const char *str);
 
-	bool find(TokenBuffer *token_buffer);
+	bool find(string &words, vector<int> words_list);
 	//bool find(const char *str);
 
 	//bool erase(Iterator begin, Iterator end);
@@ -50,17 +51,16 @@ TrieNode::~TrieNode(){
 
 Trie::Trie():root(new Node("")) {}
 
-bool Trie::insert(TokenBuffer *token_buffer) {
+bool Trie::insert(string words, vector<int> words_list) {
 	PNode cur = root;
-	PNode pre;
-	Token token;
-	TokenBuffer::Iterator *token_iterator = token_buffer->iterator();
-	while(token_iterator->next(token)) {
-		if(cur->children.find(token.t_text) == cur->children.end()) {
-			cur->children.insert(pair<string, TrieNode*>(token.t_text, new Node(token.t_text)));
+	int position = 0;	
+	for(int i = 0; i< words_list.size(); ++i) {
+		string text = words.substr(position, words_list[i]);
+		if(cur->children.find(text) == cur->children.end()) {
+			cur->children.insert(pair<string, TrieNode*>(text, new Node(text)));
 		}
-		pre = cur;
-		cur = cur->children[token.t_text];
+		cur = cur->children[text];
+		position += words_list[i]; 
 	}
 	cur->is_leaf = true;
 	return true;
@@ -68,17 +68,18 @@ bool Trie::insert(TokenBuffer *token_buffer) {
 
 
 
-bool Trie::find(TokenBuffer *token_buffer) {
+bool Trie::find(string &words, vector<int> words_list) {
 	PNode cur = root;
-	Token token;
-	TokenBuffer::Iterator *token_iterator = token_buffer->iterator();
-	cout << "begin to find" << endl;
-	while(token_iterator->next(token)) {
-		cout << token.t_text << endl;
-		if(cur->children.find(token.t_text) == cur->children.end()) {
+	int position = 0;
+	//cout << "begin to find word:" << words_list.size()<<endl;
+	for(int i = 0; i < words_list.size(); ++i){
+		string text = words.substr(position, words_list[i]);
+		//cout << text << endl;
+		if(cur->children.find(text) == cur->children.end()) {
 			return false;
 		}
-		cur = cur->children[token.t_text];
+		position += words_list[i];
+		cur = cur->children[text];
 	}
 	if(cur->is_leaf)
 		return true;
