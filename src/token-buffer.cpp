@@ -1,3 +1,3 @@
 #include "token-buffer.h"
 
-TokenBuffer::
+//TokenBuffer::

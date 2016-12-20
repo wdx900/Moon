@@ -24,7 +24,7 @@ bool NGramTokenizer::DoTokenizerInteral(string &text, vector<string> &words_str)
 	}
 	return true;
 }
-
+/*
 bool NGramTokenizer::WriteTokenBuffer(TokenBuffer *token_buffer, string str){
 	UTF8Character character;
 	int position, length;
@@ -34,4 +34,4 @@ bool NGramTokenizer::WriteTokenBuffer(TokenBuffer *token_buffer, string str){
 		token_buffer->WriteString(word);
 	}
 	return true;
-}
+}*/
