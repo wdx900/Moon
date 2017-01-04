@@ -1,0 +1,24 @@
+#include "hmm-train.h"
+
+bool HMMTrain::read_file(string file) {
+	FileReader file_reader;
+	string file;
+	if(file_reader.open("dict")) {
+		cout << "Open file is OK" << endl;
+	}
+	UTF8Character character;
+	char* str = new char[100];
+	while(file_reader.readline(str)) {
+		int position, length;
+		vector<int> words_list;
+		TokenBuffer *token_buffer = new TokenBuffer;
+		string words(str);
+		character.SetCharacterText(words);
+		if(words.size() == 0) continue;
+		while(character.UTF8CharacterLexer(position, length)) {
+			if(length == 1) break; //遇到空格跳出
+				
+		}
+	}
+
+}

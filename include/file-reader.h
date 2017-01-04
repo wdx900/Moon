@@ -8,7 +8,7 @@ using namespace std;
 
 class FileReader{
 public:
-	bool open(char* file);
+	bool open(const char* file);
 	bool readline(char* str);
 
 public:

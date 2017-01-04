@@ -25,17 +25,16 @@ bool ForwardTokenizer::DoTokenizerInteral(string &text, vector<string> &words_st
 	file_reader.close();
 
 	
-	vector<int> length_list;
+	vector<int> length_list, position_list;
 	character.SetCharacterText(text);
 	int text_len = text.size();
 	int cur_position, cur_length;
 	while(character.UTF8CharacterLexer(cur_position, cur_length)) {
 		length_list.push_back(cur_length);
+		position_list.push_back(cur_position);
 	}
-	//length_list.push_back(0);
 	cur_position = 0;
 	int start_index = 0;
-	//int end_position = text.size();
 	int error_t = 0;
 	while(cur_position < text.size() - 1) {
 		start:
@@ -48,11 +47,14 @@ bool ForwardTokenizer::DoTokenizerInteral(string &text, vector<string> &words_st
 					break;
 				}
 				vector<int> tmp_list(length_list.begin() + start_index, length_list.begin() + j);
-				if(trie->find(word, tmp_list)){
-					cout << word << endl;
-					for(int k = 0; k < tmp_list.size(); k++) {
-						cur_position += tmp_list[k];
-					}
+				if(TOOL::judge_alphabet(word)) {
+					words_str.push_back(word);
+					cur_position = position_list[j];
+                    start_index += tmp_list.size();
+                    goto start;
+				}else if(trie->find(word, tmp_list)){
+					words_str.push_back(word);
+					cur_position = position_list[j];
 					start_index += tmp_list.size();
 					goto start;
 				}
@@ -60,9 +62,7 @@ bool ForwardTokenizer::DoTokenizerInteral(string &text, vector<string> &words_st
 				tmp_position -= length_list[j - 1];
 			}
 			end_position -= length_list[length_list.size() - i - 1];
-		}
-		
-	
+		}	
 		++error_t;
 		if(error_t > 1000) {
 			break;

@@ -1,6 +1,6 @@
 #include "file-reader.h"
 
-bool FileReader::open(char* file) {
+bool FileReader::open(const char* file) {
 	this->sfile.open(file);	
 	if(this->sfile.is_open()){
 		return true;
@@ -23,5 +23,4 @@ bool FileReader::close() {
 	}
 	return false;
 }
-
 
