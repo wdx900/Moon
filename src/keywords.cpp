@@ -1,5 +1,10 @@
 #include "keywords.h"
 
+Keywords::Keywords(string file, string text) {
+	getWordIDF(file);
+	getWordTf(text);
+}
+
 bool Keywords::getWordIDF(string file) {
 	open(file.c_str());
 	char * str = new char[100];
@@ -17,22 +22,35 @@ bool Keywords::getWordIDF(string file) {
 	return true;
 }
 
-bool Keywords::getKeywords(map<string, double> word_c, vector<string> &keywords, int num) {
-	map<string, double>::iterator iter = word_c.begin();
-	for(; iter != word_c.end(); ++iter) {
-		word_c[iter->first]  *= idf_map[iter->first];
+bool Keywords::getWordTf(string text) {
+	ForwardTokenizer forward_tokenizer;
+	vector<string> words;
+	forward_tokenizer.DoTokenizerInteral(text, words);
+	tf_map.clear();
+	for(int i = 0; i < words.size(); ++i) {
+		if(tf_map.find(words[i]) != tf_map.end()) {
+			tf_map[words[i]] += 1;
+		} else {
+			tf_map.insert(pair<string, double>(words[i], 1));
+		}
+	}
+	return true;
+}
+
+bool Keywords::getKeywords(vector<pair<string, double> > &keywords, int num) {
+	map<string, double>::iterator iter = tf_map.begin();
+	for(; iter != tf_map.end(); ++iter) {
+		tf_map[iter->first]  *= idf_map[iter->first];
 	}
 	vector<pair<string, double> > t_vec;
-	TOOL::sortMapbyValue(word_c, t_vec);
+	TOOL::sortMapbyValue(tf_map, t_vec);
 	for(int i = 0; i < t_vec.size() && i < num; ++i) {
-		cout << t_vec[i].first << ":" << t_vec[i].second << endl;
 		if(t_vec[i].second > 0){
-			keywords.push_back(t_vec[i].first);
+			keywords.push_back(t_vec[i]);
 		} else {
 			break;
 		}
 	}	
-	
 	return true;
 }
 

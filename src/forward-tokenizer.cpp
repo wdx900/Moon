@@ -1,11 +1,17 @@
 #include "forward-tokenizer.h"
 
-bool ForwardTokenizer::DoTokenizerInteral(string &text, vector<string> &words_str) {
-	FileReader file_reader;
-	Trie *trie = new Trie;
+ForwardTokenizer::ForwardTokenizer() {
 	if(file_reader.open("dict")) {
 		cout << "Open file is OK" << endl;
 	}
+}
+
+bool ForwardTokenizer::DoTokenizerInteral(string &text, vector<string> &words_str) {
+	//FileReader file_reader;
+	Trie *trie = new Trie;
+	//if(file_reader.open("dict")) {
+	//	cout << "Open file is OK" << endl;
+	//}
 	UTF8Character character;
 	char* str = new char[100];
 	while(file_reader.readline(str)) {

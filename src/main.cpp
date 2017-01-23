@@ -9,28 +9,33 @@
 #include "ngram-tokenizer.h"
 #include "forward-tokenizer.h"
 #include "keywords.h"
+#include "simhash.h"
 
 using namespace std;
 
 int main() {
 	ForwardTokenizer forward_tokenizer;
-	string text = "阅读是从视觉材料中获取信息的过程。视觉材料主要是文字和图片，也包括符号、公式、图表等。首先是把视觉材料变成声音，后达到对视觉材料的理解。阅读是一种主动的过程，是由阅读者根据不同的目的加以调节控制的,陶冶人们的情操，提升自我修养。阅读是一种理解，领悟，吸收，鉴赏，评价和探究文章的思维过程。阅读分为出声读和默看。";
-	vector<string> words;
-	map<string, double> word_c;
-	forward_tokenizer.DoTokenizerInteral(text, words);
-	for(int i = 0; i < words.size(); ++i) {
-		if(word_c.find(words[i]) != word_c.end()) {
-			word_c[words[i]] += 1;
-		} else {
-			word_c.insert(pair<string, double>(words[i], 1));
-		}
-	}
-	Keywords keywords;
-	vector<string> word_list;
-	keywords.getWordIDF("news.df.dat");
-	keywords.getKeywords(word_c, word_list, 10);	
+	string text = "山东二孩出生量超一孩";
+	string text1 = "山东二孩出生量超一孩";
+	
+	//Keywords keywords("news.df.dat", text);
+	//vector<pair<string, double> > word_list;
+	//keywords.getWordTf(text);
+	//keywords.getWordIDF("news.df.dat");
+	/*keywords.getKeywords(word_list, 10);	
 	for(int i = 0; i < word_list.size(); i++) {
-		cout << word_list[i] << ",";
+		cout << word_list[i].first << ",";
+	}*/
+	SimHash simhash("news.df.dat");
+	long v64 = 0, v64_1 = 0;
+	simhash.calculateHash(text, v64);
+	simhash.calculateHash(text1, v64_1);
+	cout << v64 << endl;
+	cout << v64_1 << endl;
+	if(simhash.isEqual(v64, v64_1)) {
+		cout << "same" << endl;
+	} else {
+		cout << "different" << endl;
 	}
 	cout << endl;
 	return 1;
