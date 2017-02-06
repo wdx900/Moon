@@ -1,36 +1,36 @@
 #include "forward-tokenizer.h"
 
 ForwardTokenizer::ForwardTokenizer() {
+	BuildTrie();
+}
+
+
+bool ForwardTokenizer::BuildTrie(){
 	if(file_reader.open("dict")) {
-		cout << "Open file is OK" << endl;
-	}
+        cout << "Open file is OK" << endl;
+    }
+	UTF8Character character;
+    char* str = new char[100];
+    while(file_reader.readline(str)) {
+        int position, length;
+        vector<int> words_list;
+        TokenBuffer *token_buffer = new TokenBuffer;
+        string words(str);
+        character.SetCharacterText(words);
+        if(words.size() == 0) continue;
+        while(character.UTF8CharacterLexer(position, length)) {
+            if(length == 1)break;
+            words_list.push_back(length);
+        }
+        this->trie.insert(words, words_list);
+    }
+
+    file_reader.close();
 }
 
 bool ForwardTokenizer::DoTokenizerInteral(string &text, vector<string> &words_str) {
-	//FileReader file_reader;
-	Trie *trie = new Trie;
-	//if(file_reader.open("dict")) {
-	//	cout << "Open file is OK" << endl;
-	//}
-	UTF8Character character;
-	char* str = new char[100];
-	while(file_reader.readline(str)) {
-		int position, length;
-		vector<int> words_list;
-		TokenBuffer *token_buffer = new TokenBuffer;
-		string words(str);
-		character.SetCharacterText(words);
-		if(words.size() == 0) continue;
-		while(character.UTF8CharacterLexer(position, length)) {
-			if(length == 1)break;
-			words_list.push_back(length);
-		}
-		trie->insert(words, words_list);
-	}
-	
-	file_reader.close();
 
-	
+	UTF8Character character;
 	vector<int> length_list, position_list;
 	character.SetCharacterText(text);
 	int text_len = text.size();
@@ -58,7 +58,7 @@ bool ForwardTokenizer::DoTokenizerInteral(string &text, vector<string> &words_st
 					cur_position = position_list[j];
                     start_index += tmp_list.size();
                     goto start;
-				}else if(trie->find(word, tmp_list)){
+				}else if(trie.find(word, tmp_list)){
 					words_str.push_back(word);
 					cur_position = position_list[j];
 					start_index += tmp_list.size();

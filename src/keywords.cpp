@@ -23,7 +23,6 @@ bool Keywords::getWordIDF(string file) {
 }
 
 bool Keywords::getWordTf(string text) {
-	ForwardTokenizer forward_tokenizer;
 	vector<string> words;
 	forward_tokenizer.DoTokenizerInteral(text, words);
 	tf_map.clear();
